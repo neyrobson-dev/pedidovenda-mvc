@@ -1,0 +1,20 @@
+unit projetopedidovenda.model.resource.factory;
+
+interface
+
+type
+  TResource = class(TInterfacedObject, iResource)
+  private
+    FConexao: iConexao;
+    FConfiguracao: iConfiguracao;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    class function New: iResource;
+    function conexao: iConexao;
+    function configuracao: iConfiguracao;
+  end;
+
+implementation
+
+end.

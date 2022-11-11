@@ -1,0 +1,38 @@
+unit projetopedidovenda.controller.dto.interfaces;
+
+interface
+
+type
+  iCliente = interface
+    function Id(Value: Integer): iCliente; overload;
+    function Id: Integer; overload;
+    function Nome(Value: String): iCliente; overload;
+    function Nome: String; overload;
+    function Cidade(Value: String): iCliente; overload;
+    function Cidade: String; overload;
+    function Uf(Value: String): iCliente; overload;
+    function Uf: String; overload;
+    function Build: iService<TCliente>;
+  end;
+
+  iProduto = interface
+    function Id(Value: Integer): iProduto; overload;
+    function Id: Integer; overload;
+    function Descricao(Value: String): iProduto; overload;
+    function Descricao: String; overload;
+    function PrecoVenda(Value: Currency): iProduto; overload;
+    function PrecoVenda: Currency; overload;
+    function Build: iService<TProduto>;
+  end;
+
+  iPedido = interface
+
+  end;
+
+  iPedidoItens = interface
+
+  end;
+
+implementation
+
+end.

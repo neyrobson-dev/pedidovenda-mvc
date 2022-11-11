@@ -1,0 +1,21 @@
+unit projetopedidovenda.model.entity.cliente;
+
+interface
+
+type
+  TCliente = class
+  private
+    FId: Integer;
+    FNome: String;
+    FCidade: String;
+    FUF: String;
+  public
+    property Id: Integer read FId write FId;
+    property FNome: String;
+    property FCidade: String;
+    property FUF: String;
+  end;
+
+implementation
+
+end.

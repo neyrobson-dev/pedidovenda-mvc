@@ -1,0 +1,18 @@
+unit projetopedidovenda.model.entity.interfaces;
+
+interface
+
+uses
+  projetopedidovenda.model.entity.cliente;
+
+type
+  iEntity = interface
+    function cliente: TCliente;
+    function produto: TProduto;
+    function pedido: TPedido;
+    function pedidoitens: TPedidoItens;
+  end;
+
+implementation
+
+end.

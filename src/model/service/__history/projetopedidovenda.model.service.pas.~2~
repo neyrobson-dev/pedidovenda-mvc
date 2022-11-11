@@ -1,0 +1,12 @@
+unit projetopedidovenda.model.service;
+
+interface
+
+type
+  iService<T: class> = interface
+
+  end;
+
+implementation
+
+end.

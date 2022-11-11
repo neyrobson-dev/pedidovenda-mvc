@@ -1,0 +1,121 @@
+unit projetopedidovenda.controller.dto.pedidoitens;
+
+interface
+
+uses
+  projetopedidovenda.controller.dto.interfaces,
+  projetopedidovenda.model.service,
+  projetopedidovenda.model.service.factory,
+  projetopedidovenda.model.entity.pedidoitens;
+
+type
+  TPedidoItensDTO = class(TInterfacedObject, iPedidoItens)
+  private
+    FEntity: TPedidoItens;
+    FService: iService<TPedidoItens>;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    class function New: iPedidoItens;
+    function Id(Value: Integer): iPedidoItens; overload;
+    function Id: Integer; overload;
+    function IdPedido(Value: Integer): iPedidoItens; overload;
+    function IdPedid: Integer; overload;
+    function IdProduto(Value: Integer): iPedidoItens; overload;
+    function IdProduto: Integer; overload;
+    function Quantidade(Value: Integer): iPedidoItens; overload;
+    function Quantidade: Integer; overload;
+    function ValorUnitario(Value: Double): iPedidoItens; overload;
+    function ValorUnitario: Double; overload;
+    function ValorTotal(Value: Double): iPedidoItens; overload;
+    function ValorTotal: Double; overload;
+    function Build: iService<TPedidoItens>;
+  end;
+
+implementation
+
+{ TPedidoItensDTO }
+
+constructor TPedidoItensDTO.Create;
+begin
+  FEntity:= TPedidoItens.Create;
+  FService := TService<TPedidoItens>.Create(FEntity);
+end;
+
+destructor TPedidoItensDTO.Destroy;
+begin
+  FEntity.DisposeOf;
+  inherited;
+end;
+
+class function TPedidoItensDTO.New: iPedidoItens;
+begin
+  Result := Self.Create;
+end;
+
+function TPedidoItensDTO.Build: iService<TPedidoItens>;
+begin
+  Result := FService;
+end;
+
+function TPedidoItensDTO.Id: Integer;
+begin
+  Result := FEntity.Id;
+end;
+
+function TPedidoItensDTO.Id(Value: Integer): iPedidoItens;
+begin
+  Result := Self;
+end;
+
+function TPedidoItensDTO.IdPedid: Integer;
+begin
+
+end;
+
+function TPedidoItensDTO.IdPedido(Value: Integer): iPedidoItens;
+begin
+
+end;
+
+function TPedidoItensDTO.IdProduto(Value: Integer): iPedidoItens;
+begin
+
+end;
+
+function TPedidoItensDTO.IdProduto: Integer;
+begin
+
+end;
+
+function TPedidoItensDTO.Quantidade(Value: Integer): iPedidoItens;
+begin
+
+end;
+
+function TPedidoItensDTO.Quantidade: Integer;
+begin
+
+end;
+
+function TPedidoItensDTO.ValorTotal: Double;
+begin
+
+end;
+
+function TPedidoItensDTO.ValorTotal(Value: Double): iPedidoItens;
+begin
+
+end;
+
+function TPedidoItensDTO.ValorUnitario: Double;
+begin
+
+end;
+
+function TPedidoItensDTO.ValorUnitario(Value: Double): iPedidoItens;
+begin
+
+end;
+
+end.

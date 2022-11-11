@@ -1,0 +1,13 @@
+unit projetopedidovenda.model.entity.cliente;
+
+interface
+
+type
+  TCliente = class
+  private
+
+  end;
+
+implementation
+
+end.

@@ -1,0 +1,14 @@
+unit projetopedidovenda.model.entity.produto;
+
+interface
+
+type
+  TProduto = class
+    FId: Integer;
+    FDescricao: String;
+    FPrecoVenda: Currency;
+  end;
+
+implementation
+
+end.

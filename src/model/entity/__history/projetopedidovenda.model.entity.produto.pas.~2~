@@ -1,0 +1,14 @@
+unit projetopedidovenda.model.entity.produto;
+
+interface
+
+type
+  TProduto = class
+    function Id: Integer; overload;
+    function Descricao: String; overload;
+    function PrecoVenda: Currency; overload;
+  end;
+
+implementation
+
+end.
