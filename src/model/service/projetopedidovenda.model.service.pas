@@ -9,7 +9,6 @@ type
   iService<T: class> = interface
     function ListarTodos: iService<T>; overload;
     function ListarPorId(aId: Integer): iService<T>;
-    function ListarPor(Field: String; Value: Variant): iService<T>;
     function Inserir: iService<T>;
     function Atualizar: iService<T>;
     function Excluir: iService<T>; overload;

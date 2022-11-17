@@ -21,7 +21,18 @@ uses
   projetopedidovenda.controller.dto.cliente in 'src\controller\dto\projetopedidovenda.controller.dto.cliente.pas',
   projetopedidovenda.controller.dto.produto in 'src\controller\dto\projetopedidovenda.controller.dto.produto.pas',
   projetopedidovenda.controller.dto.pedido in 'src\controller\dto\projetopedidovenda.controller.dto.pedido.pas',
-  projetopedidovenda.controller.dto.pedidoitens in 'src\controller\dto\projetopedidovenda.controller.dto.pedidoitens.pas';
+  projetopedidovenda.controller.dto.pedidoitens in 'src\controller\dto\projetopedidovenda.controller.dto.pedidoitens.pas',
+  SimpleAttributes in 'modules\simpleorm\SimpleAttributes.pas',
+  SimpleDAO in 'modules\simpleorm\SimpleDAO.pas',
+  SimpleDAOSQLAttribute in 'modules\simpleorm\SimpleDAOSQLAttribute.pas',
+  SimpleEntity in 'modules\simpleorm\SimpleEntity.pas',
+  SimpleInterface in 'modules\simpleorm\SimpleInterface.pas',
+  SimpleQueryFiredac in 'modules\simpleorm\SimpleQueryFiredac.pas',
+  SimpleRTTI in 'modules\simpleorm\SimpleRTTI.pas',
+  SimpleRTTIHelper in 'modules\simpleorm\SimpleRTTIHelper.pas',
+  SimpleSQL in 'modules\simpleorm\SimpleSQL.pas',
+  SimpleUtil in 'modules\simpleorm\SimpleUtil.pas',
+  SimpleValidator in 'modules\simpleorm\SimpleValidator.pas';
 
 {$R *.res}
 

@@ -27,6 +27,8 @@ type
     function Schema: String; overload;
     function Locking(Value: String): iConfiguracao; overload;
     function Locking: String; overload;
+    function Lib(Value: String): iConfiguracao; overload;
+    function Lib: String; overload;
   end;
 
   iResource = interface

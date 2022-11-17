@@ -118,6 +118,17 @@
         <DCCReference Include="src\controller\dto\projetopedidovenda.controller.dto.produto.pas"/>
         <DCCReference Include="src\controller\dto\projetopedidovenda.controller.dto.pedido.pas"/>
         <DCCReference Include="src\controller\dto\projetopedidovenda.controller.dto.pedidoitens.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleAttributes.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleDAO.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleDAOSQLAttribute.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleEntity.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleInterface.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleQueryFiredac.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleRTTI.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleRTTIHelper.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleSQL.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleUtil.pas"/>
+        <DCCReference Include="modules\simpleorm\SimpleValidator.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -147,7 +158,7 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="Win32\Debug\ProjetoPedidoVenda.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="ProjetoPedidoVenda.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>ProjetoPedidoVenda.exe</RemoteName>
                         <Overwrite>true</Overwrite>

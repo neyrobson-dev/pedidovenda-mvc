@@ -4,6 +4,24 @@ interface
 
 uses
   Data.DB,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Error,
+  FireDAC.UI.Intf,
+  FireDAC.Phys.Intf,
+  FireDAC.Stan.Def,
+  FireDAC.Stan.Pool,
+  FireDAC.Stan.Async,
+  FireDAC.Phys,
+  FireDAC.VCLUI.Wait,
+  FireDAC.Phys.MySQLDef,
+  FireDAC.Phys.MySQL,
+  FireDAC.Comp.UI,
+  FireDAC.Comp.Client,
+  SimpleInterface,
+  SimpleDAO,
+  SimpleAttributes,
+  SimpleQueryFiredac,
   projetopedidovenda.model.service,
   projetopedidovenda.model.resource,
   projetopedidovenda.model.resource.factory;
@@ -13,6 +31,8 @@ type
   private
     FParent: T;
     FConexao: iConexao;
+    FConn: iSimpleQuery;
+    FDAO: iSimpleDAO<T>;
     FDataSource: TDataSource;
   public
     constructor Create(Parent: T);
@@ -20,7 +40,6 @@ type
     class function New(Parent: T): iService<T>;
     function ListarTodos: iService<T>; overload;
     function ListarPorId(aId: Integer): iService<T>;
-    function ListarPor(Field: String; Value: Variant): iService<T>;
     function Inserir: iService<T>;
     function Atualizar: iService<T>;
     function Excluir: iService<T>; overload;
@@ -38,6 +57,8 @@ begin
   FParent := Parent;
   FDataSource := TDataSource.Create(nil);
   FConexao := TResource.New.Conexao;
+  FConn := TSimpleQueryFiredac.New(TFDConnection(FConexao.Connect));
+  FDAO := TSimpleDAO<T>.New(FConn).DataSource(FDataSource);
 end;
 
 destructor TService<T>.Destroy;
@@ -60,43 +81,37 @@ end;
 function TService<T>.Inserir: iService<T>;
 begin
   Result := Self;
-  // verificar!
+  FDAO.Insert(FParent);
 end;
 
 function TService<T>.Atualizar: iService<T>;
 begin
   Result := Self;
-  // verificar!
+  FDAO.Update(FParent);
 end;
 
 function TService<T>.Excluir(Field, Value: String): iService<T>;
 begin
   Result := Self;
-  // verificar!
+  FDAO.Delete(Field, Value);
 end;
 
 function TService<T>.Excluir: iService<T>;
 begin
   Result := Self;
-  // verificar!
-end;
-
-function TService<T>.ListarPor(Field: String; Value: Variant): iService<T>;
-begin
-  Result := Self;
-  // verificar!
+  FDAO.Delete(FParent);
 end;
 
 function TService<T>.ListarPorId(aId: Integer): iService<T>;
 begin
   Result := Self;
-  // verificar!
+  FParent := FDAO.Find(aId);
 end;
 
 function TService<T>.ListarTodos: iService<T>;
 begin
   Result := Self;
-  // verificar!
+  FDAO.Find;
 end;
 
 function TService<T>.This: T;

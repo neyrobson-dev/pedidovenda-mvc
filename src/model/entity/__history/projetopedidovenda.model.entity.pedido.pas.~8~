@@ -1,0 +1,26 @@
+unit projetopedidovenda.model.entity.pedido;
+
+interface
+
+type
+  [Tabela('pedidos')]
+  TPedido = class
+  private
+    FId: Integer;
+    FDataEmissao: TDateTime;
+    FIdCliente: Integer;
+    FValorTotal: Double;
+  public
+    [Campo('id'), Pk, AutoInc]
+    property Id: Integer read FId write FId;
+    [Campo('dataemissao')]
+    property DataEmissao: TDateTime read FDataEmissao write FDataEmissao;
+    [Campo('idcliente'), fk]
+    property IDCliente: Integer read FIDCliente write FIDCliente;
+    [Campo('dataemissao')]
+    property ValorTotal: Double read FValorTotal write FValorTotal;
+  end;
+
+implementation
+
+end.

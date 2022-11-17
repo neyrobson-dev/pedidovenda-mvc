@@ -1,0 +1,23 @@
+unit projetopedidovenda.model.entity.produto;
+
+interface
+
+type
+  [Tabela('PRODUTOS')]
+  TProduto = class
+  private
+    FId: Integer;
+    FDescricao: String;
+    FPrecoVenda: Currency;
+  public
+    [Campo('Id'), Pk, AutoInc]
+    property Id: Integer read FId write FId;
+    [Campo('Descricao')]
+    property Descricao: String read FDescricao write FDescricao;
+    [Campo('Descricao')]
+    property PrecoVenda: Currency read FPrecoVenda write FPrecoVenda;
+  end;
+
+implementation
+
+end.
