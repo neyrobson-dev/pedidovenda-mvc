@@ -119,8 +119,8 @@
     <File Path="modules"/>
     <File Path="modules\simpleorm"/>
     <File Path="modules\simpleorm\SimpleAttributes.pas"/>
-    <File Path="modules\simpleorm\SimpleDAO.pas"/>
     <File Path="modules\simpleorm\SimpleDAOSQLAttribute.pas"/>
+    <File Path="modules\simpleorm\SimpleDAO.pas"/>
     <File Path="modules\simpleorm\SimpleEntity.pas"/>
     <File Path="modules\simpleorm\SimpleInterface.pas"/>
     <File Path="modules\simpleorm\SimpleQueryFiredac.pas"/>

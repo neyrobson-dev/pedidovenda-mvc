@@ -56,9 +56,6 @@ begin
     if not FConfiguracao.Locking.IsEmpty then
       FConn.Params.Add('LockingMode=' + FConfiguracao.Locking);
 
-//    if not FConfiguracao.Lib.IsEmpty then
-//      FConn.
-
     FConn.Connected := True;
     Result := FConn;
   except

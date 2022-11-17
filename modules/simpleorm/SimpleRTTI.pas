@@ -88,11 +88,6 @@ uses
   System.RTTI,
   Data.DB,
   TypInfo,
-  {$IFNDEF CONSOLE}
-  VCL.Forms,
-  VCL.StdCtrls,
-  Vcl.ExtCtrls,
-  {$ENDIF}
   System.Classes,
   System.SysUtils;
 
@@ -104,10 +99,6 @@ Type
       FInstance : T;
       function __findRTTIField(ctxRtti : TRttiContext; classe: TClass; const Field: String): TRttiField;
       function __FloatFormat( aValue : String ) : Currency;
-      {$IFNDEF CONSOLE}
-      function __BindValueToComponent( aComponent : TComponent; aValue : Variant) : iSimpleRTTI<T>;
-      function __GetComponentToValue( aComponent : TComponent) : TValue;
-      {$ENDIF}
       function __BindValueToProperty( aEntity : T; aProperty : TRttiProperty; aValue : TValue) : iSimpleRTTI<T>;
 
       function __GetRTTIPropertyValue(aEntity : T; aPropertyName : String) : Variant;
@@ -129,54 +120,17 @@ Type
       function ClassName (var aClassName : String) : iSimpleRTTI<T>;
       function DataSetToEntityList (aDataSet : TDataSet; var aList : TObjectList<T>) : iSimpleRTTI<T>;
       function DataSetToEntity (aDataSet : TDataSet; var aEntity : T) : iSimpleRTTI<T>;
-      {$IFNDEF CONSOLE}
-      function BindClassToForm (aForm : TForm; const aEntity : T): iSimpleRTTI<T>;
-      function BindFormToClass (aForm : TForm; var aEntity : T) : iSimpleRTTI<T>;
-      {$ENDIF}
   end;
 
 implementation
 
 uses
   SimpleAttributes,
-  {$IFNDEF CONSOLE}
-  Vcl.ComCtrls,
-  Vcl.Graphics,
-  {$ENDIF}
   Variants,
   SimpleRTTIHelper,
   System.UITypes;
 
 { TSimpleRTTI }
-
-{$IFNDEF CONSOLE}
-function TSimpleRTTI<T>.__BindValueToComponent(aComponent: TComponent;
-  aValue: Variant): iSimpleRTTI<T>;
-begin
-  if VarIsNull(aValue) then exit;
-
-  if aComponent is TEdit then
-    (aComponent as TEdit).Text := aValue;
-
-  if aComponent is TComboBox then
-    (aComponent as TComboBox).ItemIndex := (aComponent as TComboBox).Items.IndexOf(aValue);
-
-  if aComponent is TRadioGroup then
-    (aComponent as TRadioGroup).ItemIndex := (aComponent as TRadioGroup).Items.IndexOf(aValue);
-
-  if aComponent is TCheckBox then
-    (aComponent as TCheckBox).Checked := aValue;
-
-  if aComponent is TTrackBar then
-    (aComponent as TTrackBar).Position := aValue;
-
-  if aComponent is TDateTimePicker then
-    (aComponent as TDateTimePicker).Date := aValue;
-
-  if aComponent is TShape then
-    (aComponent as TShape).Brush.Color := aValue;
-end;
-{$ENDIF}
 
 function TSimpleRTTI<T>.__BindValueToProperty( aEntity : T; aProperty : TRttiProperty; aValue : TValue) : iSimpleRTTI<T>;
 begin
@@ -230,36 +184,6 @@ begin
   Result := StrToCurr(aValue);
 end;
 
-{$IFNDEF CONSOLE}
-function TSimpleRTTI<T>.__GetComponentToValue(aComponent: TComponent): TValue;
-var
-  a: string;
-begin
-  if aComponent is TEdit then
-    Result := TValue.FromVariant((aComponent as TEdit).Text);
-
-  if aComponent is TComboBox then
-    Result := TValue.FromVariant((aComponent as TComboBox).Items[(aComponent as TComboBox).ItemIndex]);
-
-  if aComponent is TRadioGroup then
-    Result := TValue.FromVariant((aComponent as TRadioGroup).Items[(aComponent as TRadioGroup).ItemIndex]);
-
-  if aComponent is TCheckBox then
-    Result := TValue.FromVariant((aComponent as TCheckBox).Checked);
-
-  if aComponent is TTrackBar then
-    Result := TValue.FromVariant((aComponent as TTrackBar).Position);
-
-  if aComponent is TDateTimePicker then
-    Result := TValue.FromVariant((aComponent as TDateTimePicker).DateTime);
-
-  if aComponent is TShape then
-    Result := TValue.FromVariant((aComponent as TShape).Brush.Color);
-
-  a := Result.TOString;
-end;
-{$ENDIF}
-
 function TSimpleRTTI<T>.__GetRTTIProperty(aEntity: T;
   aPropertyName: String): TRttiProperty;
 var
@@ -286,64 +210,6 @@ function TSimpleRTTI<T>.__GetRTTIPropertyValue(aEntity: T;
 begin
   Result := __GetRTTIProperty(aEntity, aPropertyName).GetValue(Pointer(aEntity)).AsVariant;
 end;
-
-{$IFNDEF CONSOLE}
-function TSimpleRTTI<T>.BindClassToForm(aForm: TForm;
-  const aEntity: T): iSimpleRTTI<T>;
-var
-  ctxRtti : TRttiContext;
-  typRtti : TRttiType;
-  prpRtti : TRttiField;
-begin
-  Result := Self;
-  ctxRtti := TRttiContext.Create;
-  try
-    typRtti := ctxRtti.GetType(aForm.ClassInfo);
-    for prpRtti in typRtti.GetFields do
-    begin
-      if prpRtti.Tem<Bind> then
-      begin
-        __BindValueToComponent(
-                          aForm.FindComponent(prpRtti.Name),
-                          __GetRTTIPropertyValue(
-                                                   aEntity,
-                                                   prpRtti.GetAttribute<Bind>.Field
-                          )
-        );
-      end;
-    end;
-  finally
-    ctxRtti.Free;
-  end;
-end;
-
-function TSimpleRTTI<T>.BindFormToClass(aForm: TForm;
-  var aEntity: T): iSimpleRTTI<T>;
-var
-  ctxRtti : TRttiContext;
-  typRtti : TRttiType;
-  prpRtti : TRttiField;
-begin
-  Result := Self;
-  ctxRtti := TRttiContext.Create;
-  try
-    typRtti := ctxRtti.GetType(aForm.ClassInfo);
-    for prpRtti in typRtti.GetFields do
-    begin
-      if prpRtti.Tem<Bind> then
-      begin
-        __BindValueToProperty(
-          aEntity,
-          __GetRTTIProperty(aEntity, prpRtti.GetAttribute<Bind>.Field),
-          __GetComponentToValue(aForm.FindComponent(prpRtti.Name))
-        );
-      end;
-    end;
-  finally
-    ctxRtti.Free;
-  end;
-end;
-{$ENDIF}
 
 function TSimpleRTTI<T>.ClassName (var aClassName : String) : iSimpleRTTI<T>;
 var

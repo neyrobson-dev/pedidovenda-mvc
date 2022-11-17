@@ -14,7 +14,7 @@ type
     FCidade: String;
     FUF: String;
   public
-    [Campo('idCliente'), Pk, AutoInc]
+    [Campo('id'), Pk, AutoInc]
     property Id: Integer read FId write FId;
     [Campo('nome')]
     property Nome: String read FNome write FNome;

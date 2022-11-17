@@ -7,33 +7,23 @@ uses
   System.Generics.Collections,
   Data.DB,
   System.TypInfo,
-  {$IFNDEF CONSOLE}
-  VCL.Forms,
-  {$ENDIF}
   System.SysUtils;
 type
   iSimpleDAOSQLAttribute<T : class> = interface;
 
   iSimpleDAO<T : class> = interface
     ['{19261B52-6122-4C41-9DDE-D3A1247CC461}']
-    {$IFNDEF CONSOLE}
-    function Insert: iSimpleDAO<T>; overload;
-    function Update : iSimpleDAO<T>; overload;
-    function Delete : iSimpleDAO<T>; overload;
-    {$ENDIF}
     function Insert(aValue : T) : iSimpleDAO<T>; overload;
     function Update(aValue : T) : iSimpleDAO<T>; overload;
     function Delete(aValue : T) : iSimpleDAO<T>; overload;
-    function LastID : iSimpleDAO<T>;
+    function LastID : T;
     function Delete(aField : String; aValue : String) : iSimpleDAO<T>; overload;
     function DataSource( aDataSource : TDataSource) : iSimpleDAO<T>;
     function Find : iSimpleDAO<T>; overload;
     function Find(var aList : TObjectList<T>) : iSimpleDAO<T> ; overload;
     function Find(aId : Integer) : T; overload;
+    function Find(aKey: String; aValue: Variant): T; overload;
     function SQL : iSimpleDAOSQLAttribute<T>;
-    {$IFNDEF CONSOLE}
-    function BindForm(aForm : TForm)  : iSimpleDAO<T>;
-    {$ENDIF}
   end;
 
   iSimpleDAOSQLAttribute<T : class> = interface
@@ -65,10 +55,6 @@ type
     function Param (var aParam : String) : iSimpleRTTI<T>;
     function DataSetToEntityList (aDataSet : TDataSet; var aList : TObjectList<T>) : iSimpleRTTI<T>;
     function DataSetToEntity (aDataSet : TDataSet; var aEntity : T) : iSimpleRTTI<T>;
-    {$IFNDEF CONSOLE}
-    function BindClassToForm (aForm : TForm;  const aEntity : T) : iSimpleRTTI<T>;
-    function BindFormToClass (aForm : TForm; var aEntity : T) : iSimpleRTTI<T>;
-    {$ENDIF}
   end;
 
   iSimpleSQL<T> = interface

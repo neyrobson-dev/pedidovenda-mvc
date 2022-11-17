@@ -2,6 +2,9 @@ unit projetopedidovenda.model.entity.produto;
 
 interface
 
+uses
+  SimpleAttributes;
+
 type
   [Tabela('produtos')]
   TProduto = class
@@ -14,7 +17,7 @@ type
     property Id: Integer read FId write FId;
     [Campo('descricao')]
     property Descricao: String read FDescricao write FDescricao;
-    [Campo('precovenda')]
+    [Campo('precoVenda')]
     property PrecoVenda: Currency read FPrecoVenda write FPrecoVenda;
   end;
 

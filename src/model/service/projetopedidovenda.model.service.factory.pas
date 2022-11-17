@@ -40,10 +40,12 @@ type
     class function New(Parent: T): iService<T>;
     function ListarTodos: iService<T>; overload;
     function ListarPorId(aId: Integer): iService<T>;
+    function ListarPor(aKey: String; aValue: Variant): iService<T>;
     function Inserir: iService<T>;
     function Atualizar: iService<T>;
     function Excluir: iService<T>; overload;
     function Excluir(Field, Value: String): iService<T>; overload;
+    function LastID: iService<T>;
     function DataSource(var aDataSource: TDataSource): iService<T>;
     function This: T;
   end;
@@ -100,6 +102,18 @@ function TService<T>.Excluir: iService<T>;
 begin
   Result := Self;
   FDAO.Delete(FParent);
+end;
+
+function TService<T>.LastID: iService<T>;
+begin
+  Result := Self;
+  FParent := FDAO.LastID;
+end;
+
+function TService<T>.ListarPor(aKey: String; aValue: Variant): iService<T>;
+begin
+  Result := Self;
+  FParent := FDAO.Find(aKey, aValue);
 end;
 
 function TService<T>.ListarPorId(aId: Integer): iService<T>;

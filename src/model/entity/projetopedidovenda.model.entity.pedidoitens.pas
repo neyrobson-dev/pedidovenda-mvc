@@ -2,8 +2,11 @@ unit projetopedidovenda.model.entity.pedidoitens;
 
 interface
 
+uses
+  SimpleAttributes;
+
 type
-  [Tabela('pedidoitens')]
+  [Tabela('pedidositens')]
   TPedidoItens = class
   private
     FId: Integer;
@@ -15,15 +18,15 @@ type
   public
     [Campo('id'), Pk, AutoInc]
     property Id: Integer read FId write FId;
-    [Campo('idpedido'), Fk]
-    property IdPedido: Integer read FIdPedido write FIdPedido;
-    [Campo('idproduto'), Fk]
-    property IdProduto: Integer read FIdProduto write FIdProduto;
+    [Campo('idPedido'), Fk]
+    property IDPedido: Integer read FIdPedido write FIdPedido;
+    [Campo('idProduto'), Fk]
+    property IDProduto: Integer read FIdProduto write FIdProduto;
     [Campo('quantidade')]
     property Quantidade: Integer read FQuantidade write FQuantidade;
-    [Campo('valorunitario')]
+    [Campo('valorUnitario')]
     property ValorUnitario: Double read FValorUnitario write FValorUnitario;
-    [Campo('valortotal')]
+    [Campo('valorTotal')]
     property ValorTotal: Double read FValorTotal write FValorTotal;
   end;
 
