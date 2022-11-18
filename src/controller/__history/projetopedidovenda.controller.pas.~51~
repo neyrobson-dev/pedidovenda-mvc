@@ -55,6 +55,8 @@ function TController.Configuracao: iConfiguracao;
 begin
   FConfiguracao := TConfiguracao.New;
   Result := FConfiguracao;
+
+  freeandnil();
 end;
 
 function TController.Cliente: iCliente;
@@ -77,8 +79,7 @@ end;
 
 function TController.PedidoItens: iPedidoItens;
 begin
-  if not Assigned(FPedidoItens) then
-    FPedidoItens := TPedidoItensDTO.New;
+  FPedidoItens := TPedidoItensDTO.New;
   Result := FPedidoItens;
 end;
 

@@ -201,7 +201,7 @@ begin
     if not FDataSource.DataSet.IsEmpty then
     begin
       edtIdCliente.Text := FDataSource.DataSet.FieldByName('idCliente').AsString;
-      FIdPedido := FDataSource.DataSet.FieldByName('id').AsInteger;
+      FIdPedido := FDataSource.DataSet.FieldByName('id').AsString;
       dataItens := TDataSource.Create(nil);
       try
         FController.PedidoItens.Build.ListarPor('idPedido', iId).DataSource(dataItens);
@@ -257,6 +257,7 @@ end;
 procedure TfrmPedidoVenda.btnFinalizarPedidoClick(Sender: TObject);
 var
   iIdPedido: Integer;
+  I: Integer;
 begin
   try
     iIdPedido := FController.Pedido
@@ -340,8 +341,7 @@ procedure TfrmPedidoVenda.btnCancelarPedidoClick(Sender: TObject);
 begin
   if FIdPedido > 0 then
   begin
-    FController.PedidoItens.Build.Excluir('idPedido', IntToStr(FIdPedido));
-    FController.Pedido.Build.Excluir('id', IntToStr(FIdPedido));
+    FController.Pedido.Build.Excluir('id', FIdPedido);
   end;
 
   edtIdCliente.Clear;

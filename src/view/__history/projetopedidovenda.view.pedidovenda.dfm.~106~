@@ -12,7 +12,6 @@ object frmPedidoVenda: TfrmPedidoVenda
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
@@ -104,6 +103,7 @@ object frmPedidoVenda: TfrmPedidoVenda
     Width = 143
     Height = 31
     Caption = 'Confirmar'
+    Flat = True
     OnClick = btnConfirmarClick
   end
   object btnFinalizarPedido: TSpeedButton
@@ -112,6 +112,7 @@ object frmPedidoVenda: TfrmPedidoVenda
     Width = 143
     Height = 31
     Caption = 'Finalizar Pedido'
+    Flat = True
     Glyph.Data = {
       36030000424D3603000000000000360000002800000010000000100000000100
       18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -147,6 +148,7 @@ object frmPedidoVenda: TfrmPedidoVenda
     Width = 143
     Height = 31
     Caption = 'Cancelar Pedido'
+    Flat = True
     Glyph.Data = {
       36030000424D3603000000000000360000002800000010000000100000000100
       18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -189,11 +191,12 @@ object frmPedidoVenda: TfrmPedidoVenda
     Font.Style = []
     ParentFont = False
   end
-  object btnBuscaPedido: TSpeedButton
+  object SpeedButton4: TSpeedButton
     Left = 818
     Top = 39
     Width = 32
     Height = 31
+    Flat = True
     Glyph.Data = {
       36030000424D3603000000000000360000002800000010000000100000000100
       18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -221,7 +224,7 @@ object frmPedidoVenda: TfrmPedidoVenda
       FFFFFFFCEAD9FADDC2F6D6B9F4D3B5F3D4B8F5E0CDFFFFFEFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
-    OnClick = btnBuscaPedidoClick
+    OnClick = SpeedButton4Click
   end
   object edtIdCliente: TEdit
     Left = 12
@@ -287,6 +290,7 @@ object frmPedidoVenda: TfrmPedidoVenda
     Top = 188
     Width = 148
     Height = 33
+    TabStop = False
     Alignment = taRightJustify
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -294,6 +298,7 @@ object frmPedidoVenda: TfrmPedidoVenda
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
+    ReadOnly = True
     TabOrder = 4
   end
   object Panel27: TPanel
@@ -671,9 +676,6 @@ object frmPedidoVenda: TfrmPedidoVenda
       DisplayLabel = 'Valor total'
       DisplayWidth = 35
       FieldName = 'valorTotal'
-    end
-    object fdmItensitem: TIntegerField
-      FieldName = 'item'
     end
     object fdmItenstotalGeral: TAggregateField
       FieldName = 'totalGeral'
