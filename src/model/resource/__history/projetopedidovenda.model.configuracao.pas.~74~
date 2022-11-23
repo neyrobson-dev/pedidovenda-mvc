@@ -98,7 +98,7 @@ end;
 
 function TConfiguracao.Lib: String;
 begin
-  Result := ArquivoINI.ReadString('CONEXAO','Lib','');
+
 end;
 
 function TConfiguracao.Lib(Value: String): iConfiguracao;

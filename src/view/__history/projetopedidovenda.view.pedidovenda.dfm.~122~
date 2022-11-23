@@ -237,7 +237,6 @@ object frmPedidoVenda: TfrmPedidoVenda
     ParentFont = False
     TabOrder = 0
     OnChange = edtIdClienteChange
-    OnExit = edtIdClienteExit
   end
   object edtNomeCliente: TEdit
     Left = 139
@@ -637,6 +636,22 @@ object frmPedidoVenda: TfrmPedidoVenda
         Width = 253
         Visible = True
       end>
+  end
+  object MaskEdit1: TMaskEdit
+    Left = 293
+    Top = 212
+    Width = 145
+    Height = 33
+    EditMask = '99999\,00;1;_'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 8
+    ParentFont = False
+    TabOrder = 9
+    Text = '     ,  '
   end
   object fdmItens: TFDMemTable
     FieldDefs = <>

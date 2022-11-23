@@ -66,7 +66,7 @@ end;
 
 destructor TService<T>.Destroy;
 begin
-  if FDataSource.ComponentState <> [csDestroying] then
+  if FDataSource.ComponentState = [csDestroying] then
     FDataSource.DisposeOf;
   inherited;
 end;

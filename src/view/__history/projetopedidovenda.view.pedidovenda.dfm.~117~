@@ -237,7 +237,6 @@ object frmPedidoVenda: TfrmPedidoVenda
     ParentFont = False
     TabOrder = 0
     OnChange = edtIdClienteChange
-    OnExit = edtIdClienteExit
   end
   object edtNomeCliente: TEdit
     Left = 139
@@ -298,8 +297,6 @@ object frmPedidoVenda: TfrmPedidoVenda
     Font.Style = []
     ParentFont = False
     TabOrder = 4
-    OnExit = edtValorUnitarioExit
-    OnKeyPress = edtValorUnitarioKeyPress
   end
   object Panel27: TPanel
     Left = 592

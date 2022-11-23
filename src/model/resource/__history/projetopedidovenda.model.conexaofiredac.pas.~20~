@@ -57,8 +57,8 @@ begin
     if not FConfiguracao.Locking.IsEmpty then
       FConn.Params.Add('LockingMode=' + FConfiguracao.Locking);
 
-    if not FConfiguracao.Lib.IsEmpty then
-      FDriveMySQL.VendorLib := FConfiguracao.Lib;
+    if not FConfiguracao.Schema.IsEmpty then
+      FDriveMySQL.VendorLib := FConfiguracao.Schema;
 
     FConn.Connected := True;
     Result := FConn;

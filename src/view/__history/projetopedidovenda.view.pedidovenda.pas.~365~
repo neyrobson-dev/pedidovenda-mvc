@@ -196,9 +196,9 @@ begin
     fdmItens.FieldByName('idProduto').AsString := edtIdProduto.Text;
     fdmItens.FieldByName('descricaoProduto').AsString := FDataSource.DataSet.FieldByName('descricao').AsString;
     fdmItens.FieldByName('quantidade').AsString := edtQuantidade.Text;
-    fdmItens.FieldByName('valorUnitario').AsString := StringReplace(edtValorUnitario.Text, '.','',[rfReplaceAll]);
-    fdmItens.FieldByName('valorTotal').AsString := StringReplace(FormatFloat('#,##0.00',(fdmItens.FieldByName('valorUnitario').AsCurrency *
-      (StrToInt(edtQuantidade.Text)))),'.','',[rfReplaceAll]);;
+    fdmItens.FieldByName('valorUnitario').AsString := StringReplace(edtValorUnitario.Text, '.','');
+    fdmItens.FieldByName('valorTotal').AsString := FormatFloat('#,##0.00',(fdmItens.FieldByName('valorUnitario').AsCurrency *
+      (StrToInt(edtQuantidade.Text))));
     fdmItens.Post;
   finally
     fdmItens.Cancel;

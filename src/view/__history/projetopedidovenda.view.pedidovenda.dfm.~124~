@@ -237,7 +237,6 @@ object frmPedidoVenda: TfrmPedidoVenda
     ParentFont = False
     TabOrder = 0
     OnChange = edtIdClienteChange
-    OnExit = edtIdClienteExit
   end
   object edtNomeCliente: TEdit
     Left = 139

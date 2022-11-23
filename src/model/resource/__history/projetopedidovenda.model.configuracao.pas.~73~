@@ -96,17 +96,6 @@ begin
   ArquivoINI.WriteString('CONEXAO','Locking',Value);
 end;
 
-function TConfiguracao.Lib: String;
-begin
-  Result := ArquivoINI.ReadString('CONEXAO','Lib','');
-end;
-
-function TConfiguracao.Lib(Value: String): iConfiguracao;
-begin
-  Result := Self;
-  ArquivoINI.WriteString('CONEXAO','Lib',Value);
-end;
-
 function TConfiguracao.Locking: String;
 begin
   Result := ArquivoINI.ReadString('CONEXAO','Locking','');

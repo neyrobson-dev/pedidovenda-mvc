@@ -26,7 +26,6 @@ type
     private
       FConfiguracao: iConfiguracao;
       FConn: TFDConnection;
-      FDriveMySQL: TFDPhysMySQLDriverLink;
     public
       constructor Create(Configuracao: iConfiguracao);
       destructor Destroy; override;
@@ -57,9 +56,6 @@ begin
     if not FConfiguracao.Locking.IsEmpty then
       FConn.Params.Add('LockingMode=' + FConfiguracao.Locking);
 
-    if not FConfiguracao.Lib.IsEmpty then
-      FDriveMySQL.VendorLib := FConfiguracao.Lib;
-
     FConn.Connected := True;
     Result := FConn;
   except
@@ -70,7 +66,6 @@ end;
 constructor TConexaoFiredac.Create(Configuracao: iConfiguracao);
 begin
   FConn := TFDConnection.Create(nil);
-  FDriveMySQL := TFDPhysMySQLDriverLink.Create(nil);
   FConfiguracao := Configuracao;
 end;
 

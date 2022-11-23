@@ -41,8 +41,6 @@ type
     function Schema: String; overload;
     function Locking(Value: String): iCOnfiguracao; overload;
     function Locking: String; overload;
-    function Lib(Value: String): iConfiguracao; overload;
-    function Lib: String; overload;
   end;
 
 implementation
@@ -94,17 +92,6 @@ function TConfiguracao.Locking(Value: String): iCOnfiguracao;
 begin
   Result := Self;
   ArquivoINI.WriteString('CONEXAO','Locking',Value);
-end;
-
-function TConfiguracao.Lib: String;
-begin
-  Result := ArquivoINI.ReadString('CONEXAO','Lib','');
-end;
-
-function TConfiguracao.Lib(Value: String): iConfiguracao;
-begin
-  Result := Self;
-  ArquivoINI.WriteString('CONEXAO','Lib',Value);
 end;
 
 function TConfiguracao.Locking: String;
