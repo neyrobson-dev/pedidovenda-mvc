@@ -67,7 +67,7 @@ end;
 constructor TConexaoFiredac.Create(Configuracao: iConfiguracao);
 begin
   FConn := TFDConnection.Create(nil);
-  FDriveMySQL := TFDPhysMySQLDriverLink;
+  FDriveMySQL := TFDPhysMySQLDriverLink.Create(nil);
   FConfiguracao := Configuracao;
 end;
 

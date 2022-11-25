@@ -46,6 +46,7 @@ begin
     FConn.Params.Password := FConfiguracao.Password;
     FConn.Params.Add('Port=' + FConfiguracao.Port);
     FConn.Params.Add('Server=' + FConfiguracao.Server);
+    FConn.Params.Add('SSL=FALSE');
 
     if not FConfiguracao.Schema.IsEmpty then
     begin
@@ -55,9 +56,6 @@ begin
 
     if not FConfiguracao.Locking.IsEmpty then
       FConn.Params.Add('LockingMode=' + FConfiguracao.Locking);
-
-//    if not FConfiguracao.Lib.IsEmpty then
-//      FConn.
 
     FConn.Connected := True;
     Result := FConn;

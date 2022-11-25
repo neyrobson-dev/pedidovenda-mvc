@@ -26,6 +26,7 @@ type
     private
       FConfiguracao: iConfiguracao;
       FConn: TFDConnection;
+      FDriveMySQL: TFDPhysMySQLDriverLink;
     public
       constructor Create(Configuracao: iConfiguracao);
       destructor Destroy; override;
@@ -46,6 +47,7 @@ begin
     FConn.Params.Password := FConfiguracao.Password;
     FConn.Params.Add('Port=' + FConfiguracao.Port);
     FConn.Params.Add('Server=' + FConfiguracao.Server);
+    FConn.Params.Add('SSL=False');
 
     if not FConfiguracao.Schema.IsEmpty then
     begin
@@ -57,7 +59,7 @@ begin
       FConn.Params.Add('LockingMode=' + FConfiguracao.Locking);
 
     if not FConfiguracao.Lib.IsEmpty then
-      FConn.Params.Add('');
+      FDriveMySQL.VendorLib := FConfiguracao.Lib;
 
     FConn.Connected := True;
     Result := FConn;
@@ -69,6 +71,7 @@ end;
 constructor TConexaoFiredac.Create(Configuracao: iConfiguracao);
 begin
   FConn := TFDConnection.Create(nil);
+  FDriveMySQL := TFDPhysMySQLDriverLink.Create(nil);
   FConfiguracao := Configuracao;
 end;
 
@@ -84,3 +87,4 @@ begin
 end;
 
 end.
+
