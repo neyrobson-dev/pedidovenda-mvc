@@ -77,8 +77,7 @@ end;
 
 function TController.PedidoItens: iPedidoItens;
 begin
-  if not Assigned(FPedidoItens) then
-    FPedidoItens := TPedidoItensDTO.New;
+  FPedidoItens := TPedidoItensDTO.New;
   Result := FPedidoItens;
 end;
 

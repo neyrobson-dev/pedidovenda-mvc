@@ -48,9 +48,6 @@ type
     Shape5: TShape;
     Label8: TLabel;
     lblValorTotal: TLabel;
-    btnConfirmar: TSpeedButton;
-    btnFinalizarPedido: TSpeedButton;
-    btnCancelarPedido: TSpeedButton;
     Label7: TLabel;
     edtNumeroPedido: TEdit;
     btnBuscaPedido: TSpeedButton;
@@ -75,18 +72,22 @@ type
     fdmItensvalorTotal: TCurrencyField;
     fdmItenstotalGeral: TAggregateField;
     fdmItensitem: TIntegerField;
+    btnConfirmar: TBitBtn;
+    btnFinalizarPedido: TBitBtn;
+    btnCancelarPedido: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure edtIdClienteChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure btnCancelarPedidoClick(Sender: TObject);
-    procedure btnConfirmarClick(Sender: TObject);
     procedure edtIdProdutoChange(Sender: TObject);
-    procedure btnFinalizarPedidoClick(Sender: TObject);
     procedure btnBuscaPedidoClick(Sender: TObject);
     procedure dbgrdItensKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure edtValorUnitarioKeyPress(Sender: TObject; var Key: Char);
     procedure edtValorUnitarioExit(Sender: TObject);
     procedure edtIdClienteExit(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnFinalizarPedidoClick(Sender: TObject);
+    procedure btnCancelarPedidoClick(Sender: TObject);
+    procedure edtNumeroPedidoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     FController: iController;
@@ -96,12 +97,13 @@ type
     FItem: Integer;
 
     procedure PreencheList;
-    procedure TotalizarPedido;
     procedure EditarItem(aItem: Integer);
-    procedure LimparDadosProduto;
-    procedure HabilitaCampos(aValue: Boolean);
+    procedure LimparCamposProduto;
+    procedure LimparCamposCliente;
     procedure TestarClienteInformado;
     procedure TestarProdutoInformado;
+    procedure TotalizarPedido;
+    procedure HabilitaCampos(aValue: Boolean = True);
   public
     { Public declarations }
   end;
@@ -124,7 +126,7 @@ begin
   if not (iId = 0) then
   begin
     edtNomeCliente.Text := FController.Cliente.Build.ListarPorId(iId).This.Nome;
-    HabilitaCampos(True);
+    HabilitaCampos();
   end;
 end;
 
@@ -151,8 +153,15 @@ begin
       Exit;
     end;
     Application.MessageBox('Não foi possível encontrar nenhum produto com o código informado!','Atenção', MB_OK+MB_ICONWARNING);
-    LimparDadosProduto;
+    LimparCamposProduto;
   end;
+end;
+
+procedure TfrmPedidoVenda.edtNumeroPedidoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    btnBuscaPedidoClick(nil);
 end;
 
 procedure TfrmPedidoVenda.edtValorUnitarioExit(Sender: TObject);
@@ -160,7 +169,7 @@ begin
   if edtValorUnitario.Text = EmptyStr then
     edtValorUnitario.Text := '0';
 
-  edtValorUnitario.Text := FormatFloat('#,##0.00', StrtoFloat(edtValorUnitario.Text));
+  edtValorUnitario.Text := FormatFloat('#,##0.00', StrtoFloat(StringReplace(edtValorUnitario.Text, '.','',[rfReplaceAll])));
 end;
 
 procedure TfrmPedidoVenda.edtValorUnitarioKeyPress(Sender: TObject;
@@ -172,7 +181,8 @@ end;
 
 procedure TfrmPedidoVenda.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  FDataSource.DisposeOf;
+  if FDataSource.ComponentState <> [csDestroying] then
+    FDataSource.DisposeOf;
 end;
 
 procedure TfrmPedidoVenda.FormCreate(Sender: TObject);
@@ -181,7 +191,7 @@ begin
   FController := TController.New;
 end;
 
-procedure TfrmPedidoVenda.HabilitaCampos(aValue: Boolean);
+procedure TfrmPedidoVenda.HabilitaCampos(aValue: Boolean = True);
 begin
   edtIdCliente.Enabled := aValue;
   edtIdProduto.Enabled := aValue;
@@ -206,7 +216,7 @@ begin
 
   TotalizarPedido;
 
-  LimparDadosProduto;
+  LimparCamposProduto;
 end;
 
 procedure TfrmPedidoVenda.TestarClienteInformado;
@@ -229,6 +239,12 @@ begin
   end;
 end;
 
+procedure TfrmPedidoVenda.LimparCamposCliente;
+begin
+  edtIdCliente.Clear;
+  edtNomeCliente.Clear;
+end;
+
 procedure TfrmPedidoVenda.TotalizarPedido;
 begin
   if (fdmItens.RecordCount <= 0) or (fdmItens.FieldByName('totalGeral').Value = 0) then
@@ -238,8 +254,98 @@ begin
     Exit;
   end;
 
-  lblValorTotal.Caption := 'R$ ' + fdmItens.FieldByName('totalGeral').AsString;
+  lblValorTotal.Caption := 'R$ ' + FormatFloat('#,##0.00', fdmItens.FieldByName('totalGeral').Value);
   FValorTotal := fdmItens.FieldByName('totalGeral').Value;
+end;
+
+procedure TfrmPedidoVenda.btnConfirmarClick(Sender: TObject);
+begin
+  TestarClienteInformado;
+  TestarProdutoInformado;
+
+  if FItem > 0 then
+    EditarItem(FItem)
+  else
+    PreencheList;
+end;
+
+procedure TfrmPedidoVenda.btnFinalizarPedidoClick(Sender: TObject);
+var
+  iIdPedido: Integer;
+  sTipoAcao: string;
+begin
+  TestarClienteInformado;
+
+  try
+    if FIdPedido <= 0 then
+    begin
+      sTipoAcao := 'cadastrado';
+      iIdPedido := FController.Pedido
+        .IdCliente(StrToInt(edtIdCliente.Text))
+        .ValorTotal(FValorTotal)
+        .DataEmissao(Now)
+        .Build
+        .Inserir
+        .LastID.This.Id;
+    end
+    else
+    begin
+      sTipoAcao := 'atualizado';
+      FController.Pedido
+        .Id(FIdPedido)
+        .IdCliente(StrToInt(edtIdCliente.Text))
+        .ValorTotal(FValorTotal)
+        .DataEmissao(Now)
+        .Build
+        .Atualizar;
+
+      FController.PedidoItens.Build.Excluir('idPedido', IntToStr(FIdPedido));
+      iIdPedido := FIdPedido;
+    end;
+
+    fdmItens.First;
+    while not fdmItens.Eof do
+    begin
+      FController.PedidoItens
+        .IdPedido(iIdPedido)
+        .IdProduto(fdmItens.FieldByName('idProduto').AsInteger)
+        .Quantidade(fdmItens.FieldByName('quantidade').AsInteger)
+        .ValorUnitario(fdmItens.FieldByName('valorUnitario').AsFloat)
+        .ValorTotal(fdmItens.FieldByName('valorTotal').AsFloat)
+        .Build.Inserir;
+
+      fdmItens.Next;
+    end;
+
+    Application.MessageBox(pChar(Format('Pedido Nº %d %s com sucesso!', [iIdPedido, sTipoAcao])),'Sucesso',MB_OK+MB_ICONINFORMATION);
+    LimparCamposCliente;
+    edtNumeroPedido.Clear;
+
+    fdmItens.Close;
+    TotalizarPedido;
+    HabilitaCampos();
+  except
+    raise Exception.Create('Não foi possivel realizar o pedido');
+  end;
+end;
+
+procedure TfrmPedidoVenda.btnCancelarPedidoClick(Sender: TObject);
+begin
+  if (FIdPedido > 0) and (Application.MessageBox('Confirma a exclusão do pedido?','Confirmação', MB_YESNO+MB_ICONQUESTION) = mrYes) then
+  begin
+    FController.PedidoItens.Build.Excluir('idPedido', IntToStr(FIdPedido));
+    FController.Pedido.Build.Excluir('id', IntToStr(FIdPedido));
+
+    Application.MessageBox('Pedido excluído com sucesso!','Sucesso',MB_OK+MB_ICONINFORMATION);
+  end;
+
+  LimparCamposCliente;
+  LimparCamposProduto;
+
+  edtNumeroPedido.Clear;
+
+  fdmItens.Close;
+  HabilitaCampos();
 end;
 
 procedure TfrmPedidoVenda.btnBuscaPedidoClick(Sender: TObject);
@@ -272,8 +378,8 @@ begin
           fdmItens.FieldByName('idProduto').AsString := dataItens.DataSet.FieldByName('idProduto').AsString;
           fdmItens.FieldByName('descricaoProduto').AsString := FController.Produto.Build.ListarPorId(dataItens.DataSet.FieldByName('idProduto').AsInteger).This.Descricao;
           fdmItens.FieldByName('quantidade').AsString := dataItens.DataSet.FieldByName('quantidade').AsString;
-          fdmItens.FieldByName('valorUnitario').AsString := FormatFloat('#,##0.00', dataItens.DataSet.FieldByName('valorUnitario').AsFloat);
-          fdmItens.FieldByName('valorTotal').AsString := FormatFloat('#,##0.00', dataItens.DataSet.FieldByName('valorTotal').AsFloat);
+          fdmItens.FieldByName('valorUnitario').AsString := StringReplace(FormatFloat('#,##0.00', dataItens.DataSet.FieldByName('valorUnitario').AsFloat), '.','',[rfReplaceAll]);
+          fdmItens.FieldByName('valorTotal').AsString := StringReplace(FormatFloat('#,##0.00', dataItens.DataSet.FieldByName('valorTotal').AsFloat), '.','',[rfReplaceAll]);
           fdmItens.Post;
           dataItens.DataSet.Next;
         end;
@@ -292,55 +398,6 @@ begin
   end;
 end;
 
-procedure TfrmPedidoVenda.btnConfirmarClick(Sender: TObject);
-begin
-  TestarClienteInformado;
-  TestarProdutoInformado;
-
-  if FItem > 0 then
-    EditarItem(FItem)
-  else
-    PreencheList;
-end;
-
-procedure TfrmPedidoVenda.btnFinalizarPedidoClick(Sender: TObject);
-var
-  iIdPedido: Integer;
-begin
-  TestarClienteInformado;
-
-  try
-    iIdPedido := FController.Pedido
-      .IdCliente(StrToInt(edtIdCliente.Text))
-      .ValorTotal(FValorTotal)
-      .Build
-      .Inserir
-      .LastID.This.Id;
-
-    fdmItens.First;
-    while not fdmItens.Eof do
-    begin
-      FController.PedidoItens
-        .IdPedido(iIdPedido)
-        .IdProduto(fdmItens.FieldByName('idProduto').AsInteger)
-        .Quantidade(fdmItens.FieldByName('quantidade').AsInteger)
-        .ValorUnitario(fdmItens.FieldByName('valorUnitario').AsFloat)
-        .ValorTotal(fdmItens.FieldByName('valorTotal').AsFloat)
-        .Build.Inserir;
-
-      fdmItens.Next;
-    end;
-
-    Application.MessageBox('Pedido realizado com sucesso!','Sucesso',MB_OK+MB_ICONINFORMATION);
-
-    edtIdCliente.Clear;
-    edtNomeCliente.Clear;
-    fdmItens.Close;
-  except
-    raise Exception.Create('Não foi possivel realizar o pedido');
-  end;
-end;
-
 procedure TfrmPedidoVenda.dbgrdItensKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   case Key of
@@ -350,6 +407,8 @@ begin
       edtIdProduto.Text := fdmItens.FieldByName('idProduto').AsString;
       edtQuantidade.Text := fdmItens.FieldByName('quantidade').AsString;
       edtValorUnitario.Text := fdmItens.FieldByName('valorUnitario').AsString;
+
+      edtQuantidade.SetFocus;
 
       HabilitaCampos(False);
     end;
@@ -369,36 +428,24 @@ begin
   fdmItens.Edit;
   fdmItens.FieldByName('idProduto').AsString := edtIdProduto.Text;
   fdmItens.FieldByName('quantidade').AsString := edtQuantidade.Text;
-  fdmItens.FieldByName('valorUnitario').AsString := edtValorUnitario.Text;
-  fdmItens.FieldByName('valorTotal').AsString := FormatFloat('#,##0.00',(fdmItens.FieldByName('valorUnitario').AsCurrency *
-    (StrToInt(edtQuantidade.Text))));
+  fdmItens.FieldByName('valorUnitario').AsString := StringReplace(edtValorUnitario.Text, '.','',[rfReplaceAll]);
+  fdmItens.FieldByName('valorTotal').AsString := StringReplace(FormatFloat('#,##0.00',(fdmItens.FieldByName('valorUnitario').AsCurrency *
+    (StrToInt(edtQuantidade.Text)))), '.','',[rfReplaceAll]);
   fdmItens.Post;
+
+  TotalizarPedido;
 
   FItem := 0;
 
-  LimparDadosProduto;
-  HabilitaCampos(True);
+  LimparCamposProduto;
+//  HabilitaCampos();
 end;
 
-procedure TfrmPedidoVenda.LimparDadosProduto;
+procedure TfrmPedidoVenda.LimparCamposProduto;
 begin
   edtIdProduto.Clear;
   edtValorUnitario.Clear;
   edtQuantidade.Text := '1';
-end;
-
-procedure TfrmPedidoVenda.btnCancelarPedidoClick(Sender: TObject);
-begin
-  if FIdPedido > 0 then
-  begin
-    FController.PedidoItens.Build.Excluir('idPedido', IntToStr(FIdPedido));
-    FController.Pedido.Build.Excluir('id', IntToStr(FIdPedido));
-  end;
-
-  edtIdCliente.Clear;
-  edtNomeCliente.Clear;
-  fdmItens.Close;
-  HabilitaCampos(True);
 end;
 
 end.
